@@ -1,7 +1,12 @@
 package com.example.dorin.journal;
 
+import android.content.Intent;
+import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -9,5 +14,48 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ListView list = findViewById(R.id.listView);
+        list.setOnItemClickListener(new listClickListener());
+        list.setOnItemLongClickListener(new listLongClickListener());
+
+        EntryDatabase db = EntryDatabase.getInstance(getApplicationContext());
     }
+
+    public void create_new (View view) {
+
+        Intent input = new Intent (this, InputActivity.class);
+        startActivity(input);
+    }
+
+    private class listClickListener implements AdapterView.OnItemClickListener {
+
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            Cursor cursor = (Cursor) adapterView.getItemAtPosition(i);
+            String title = cursor.getString(cursor.getColumnIndex("title"));
+            String content = cursor.getString(cursor.getColumnIndex("content"));
+            String mood = cursor.getString(cursor.getColumnIndex("mood"));
+            String timestamp = cursor.getString(cursor.getColumnIndex("timestamp"));
+
+            Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+            intent.putExtra("title", title);
+            intent.putExtra("content", content);
+            intent.putExtra("mood", mood);
+            intent.putExtra("timestamp", timestamp);
+            startActivity(intent);
+        }
+    }
+
+
+    private class listLongClickListener implements AdapterView.OnItemLongClickListener {
+        @Override
+        public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+            Cursor cursor = (Cursor) adapterView.getItemAtPosition(i);
+            final long id = cursor.getLong(cursor.getColumnIndex("_id"));
+            //EntryDatabase.delete(id);
+            //updateData();
+            return false;
+        }
+    }
+
 }
