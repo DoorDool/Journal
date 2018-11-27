@@ -1,6 +1,8 @@
 package com.example.dorin.journal;
 
-public class JournalEntry {
+import java.io.Serializable;
+
+public class JournalEntry implements Serializable {
 
     private Integer id;
     private String title, content, mood, timestamp;

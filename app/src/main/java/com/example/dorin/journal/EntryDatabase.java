@@ -17,10 +17,12 @@ public class EntryDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sqlCreate = "CREATE TABLE entries (_id INTEGER PRIMARY KEY, title TEXT, content TEXT, timestamp DATETIME DEFAULT( datetime('now', 'localtime')));";
+        // SQL for making table entries
+        String sqlCreate = "CREATE TABLE entries (_id INTEGER PRIMARY KEY, title TEXT, content TEXT, mood TEXT, timestamp DATETIME DEFAULT( datetime('now', 'localtime')));";
         db.execSQL(sqlCreate);
     }
 
+    ////////////////////////////don't understand this
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS entries;");
@@ -28,9 +30,11 @@ public class EntryDatabase extends SQLiteOpenHelper {
     }
 
     public static EntryDatabase getInstance(Context context) {
+        // if database exist return instance /////////////////////////////
         if (EntryDatabase.instance != null) {
             return EntryDatabase.instance;
         }
+        // else make database
         else {
             EntryDatabase.instance = new EntryDatabase(context, "entries", null, 1);
             return EntryDatabase.instance;
@@ -38,7 +42,24 @@ public class EntryDatabase extends SQLiteOpenHelper {
     }
 
     public static Cursor selectAll(EntryDatabase instance) {
-        SQLiteDatabase database = instance.getWritableDatabase();
-        return database.rawQuery("SELECT * FROM journal", null);
+        SQLiteDatabase db = instance.getWritableDatabase();
+        // SQL select all entries from entries database
+        return db.rawQuery("SELECT * FROM entries", null);
+    }
+
+    public void insert(JournalEntry entry) {
+        SQLiteDatabase db = instance.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        // calling getters from entry class
+        values.put("title", entry.getTitle());
+        values.put("mood", entry.getMood());
+        values.put("content", entry.getContent());
+        // insert entry in database
+        db.insert("entries", null, values);
+    }
+
+    static void delete(long id) {
+        SQLiteDatabase db = instance.getWritableDatabase();
+        db.delete("entries", "_id = " + id, null);
     }
 }
