@@ -2,6 +2,7 @@ package com.example.dorin.journal;
 
 import android.content.Context;
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -34,5 +35,10 @@ public class EntryDatabase extends SQLiteOpenHelper {
             EntryDatabase.instance = new EntryDatabase(context, "entries", null, 1);
             return EntryDatabase.instance;
         }
+    }
+
+    public static Cursor selectAll(EntryDatabase instance) {
+        SQLiteDatabase database = instance.getWritableDatabase();
+        return database.rawQuery("SELECT * FROM journal", null);
     }
 }
