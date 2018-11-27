@@ -27,7 +27,7 @@ public class DetailActivity extends Activity {
 
         // Set info from intent in the views
         titleView.setText(title);
-        date_moodView.setText(timestamp);
+        date_moodView.setText(timestamp + " " + mood);
         contentView.setText(content);
 
     }
