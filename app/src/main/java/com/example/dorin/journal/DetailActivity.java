@@ -3,6 +3,7 @@ package com.example.dorin.journal;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -24,6 +25,7 @@ public class DetailActivity extends Activity {
         TextView titleView = this.findViewById(R.id.Title);
         TextView date_moodView = this.findViewById(R.id.Date_time_mood);
         TextView contentView = this.findViewById(R.id.Content);
+        contentView.setMovementMethod(new ScrollingMovementMethod());
 
         // Set info from intent in the views
         titleView.setText(title);

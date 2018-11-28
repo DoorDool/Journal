@@ -23,5 +23,5 @@
         android:clickable="true"
         android:onClick="create_new"
         app:backgroundTint="@color/colorAccent"
-        app:srcCompat="@drawable/plusicon" />
+        app:srcCompat="@android:drawable/ic_menu_add" />
 </android.support.design.widget.CoordinatorLayout>
