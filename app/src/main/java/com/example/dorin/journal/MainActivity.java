@@ -18,21 +18,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // initialize list
         ListView list = findViewById(R.id.listView);
+        // set click and longclick listener on list of entries
         list.setOnItemClickListener(new listClickListener());
         list.setOnItemLongClickListener(new listLongClickListener());
 
         // make EntryDatabase
         db = EntryDatabase.getInstance(getApplicationContext());
-
-        // example
-        //String title = "First";
-        //String content = "I had a lovely day";
-        //String mood = "great";
-        //JournalEntry example = new JournalEntry(title, content, mood);
-        //Log.i("string", "this is an example: " + example);
-        //EntryDatabase.getInstance(this).insert(example);
-
         // select all entries in entries database
         Cursor cursor = EntryDatabase.selectAll(db);
         // make list for screen
@@ -41,36 +34,40 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // method for make a new entry
-    public void create_new (View view) {
-
+    public void CreateNew (View view) {
         Intent input = new Intent (this, InputActivity.class);
         startActivity(input);
     }
 
+    // method for click on entry in list
     private class listClickListener implements AdapterView.OnItemClickListener {
 
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            // cursor over items in entries
+            // get the right entry in database and get all information of it
             Cursor cursor = (Cursor) adapterView.getItemAtPosition(i);
+            int id = cursor.getInt(cursor.getColumnIndex("_id"));
             String title = cursor.getString(cursor.getColumnIndex("title"));
             String content = cursor.getString(cursor.getColumnIndex("content"));
             String mood = cursor.getString(cursor.getColumnIndex("mood"));
             String timestamp = cursor.getString(cursor.getColumnIndex("timestamp"));
-
+            // go to detailActivity
             Intent intent = new Intent(MainActivity.this, DetailActivity.class);
             // save variables in intent
             intent.putExtra("title", title);
             intent.putExtra("content", content);
             intent.putExtra("mood", mood);
             intent.putExtra("timestamp", timestamp);
+            intent.putExtra("position", id);
             startActivity(intent);
         }
     }
 
+    // method for long click on entry in list
     private class listLongClickListener implements AdapterView.OnItemLongClickListener {
         @Override
         public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+            // get that entry in database and delete it
             Cursor cursor = (Cursor) adapterView.getItemAtPosition(i);
             final long id = cursor.getLong(cursor.getColumnIndex("_id"));
             EntryDatabase.delete(id);
@@ -89,9 +86,9 @@ public class MainActivity extends AppCompatActivity {
         updateData();
     }
 
+    // when backPressed exit the app
     @Override
     public void onBackPressed() {
-        Log.i("string", "button back pressed");
         finishAffinity();
         System.exit(0);
     }

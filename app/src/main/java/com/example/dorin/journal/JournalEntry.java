@@ -7,13 +7,14 @@ public class JournalEntry implements Serializable {
     private Integer id;
     private String title, content, mood, timestamp;
 
+    // constructor
     public JournalEntry(String title, String content, String mood) {
-
         this.title = title;
         this.content = content;
         this.mood = mood;
     }
 
+    // getters and setters
     public Integer getId() {
         return id;
     }

@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:clickable="true"
-        android:onClick="create_new"
+        android:onClick="CreateNew"
         app:backgroundTint="@color/colorAccent"
         app:srcCompat="@android:drawable/ic_menu_add" />
 </android.support.design.widget.CoordinatorLayout>

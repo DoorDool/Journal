@@ -15,6 +15,7 @@ public class EntryDatabase extends SQLiteOpenHelper {
         super(context, name, factory, version);
     }
 
+    // method for making a database
     @Override
     public void onCreate(SQLiteDatabase db) {
         // SQL for making table entries
@@ -22,15 +23,16 @@ public class EntryDatabase extends SQLiteOpenHelper {
         db.execSQL(sqlCreate);
     }
 
-    ////////////////////////////don't understand this
+    // method for upgrading database
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // SQL for drop table
         db.execSQL("DROP TABLE IF EXISTS entries;");
         onCreate(db);
     }
 
     public static EntryDatabase getInstance(Context context) {
-        // if database exist return instance /////////////////////////////
+        // if database exist return instance
         if (EntryDatabase.instance != null) {
             return EntryDatabase.instance;
         }
@@ -41,12 +43,14 @@ public class EntryDatabase extends SQLiteOpenHelper {
         }
     }
 
+    // method for select all entries in database
     public static Cursor selectAll(EntryDatabase instance) {
         SQLiteDatabase db = instance.getWritableDatabase();
         // SQL select all entries from entries database
         return db.rawQuery("SELECT * FROM entries", null);
     }
 
+    // method for insert an entry in the database
     public void insert(JournalEntry entry) {
         SQLiteDatabase db = instance.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -58,6 +62,7 @@ public class EntryDatabase extends SQLiteOpenHelper {
         db.insert("entries", null, values);
     }
 
+    // method for deleting an entry in the database
     static void delete(long id) {
         SQLiteDatabase db = instance.getWritableDatabase();
         db.delete("entries", "_id = " + id, null);

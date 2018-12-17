@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 public class DetailActivity extends Activity {
+
+    String title, content, mood, timestamp;
+    int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,10 +19,11 @@ public class DetailActivity extends Activity {
 
         // initialize info from intent
         Intent intent = getIntent();
-        String title = (String) intent.getSerializableExtra("title");
-        String content = (String) intent.getSerializableExtra("content");
-        String mood = (String) intent.getSerializableExtra("mood");
-        String timestamp = (String) intent.getSerializableExtra("timestamp");
+        position = (int) intent.getSerializableExtra("position");
+        title = (String) intent.getSerializableExtra("title");
+        content = (String) intent.getSerializableExtra("content");
+        mood = (String) intent.getSerializableExtra("mood");
+        timestamp = (String) intent.getSerializableExtra("timestamp");
 
         // Initialize id's from views
         TextView titleView = this.findViewById(R.id.Title);
@@ -31,13 +35,24 @@ public class DetailActivity extends Activity {
         titleView.setText(title);
         date_moodView.setText(timestamp + " " + mood);
         contentView.setText(content);
-
     }
 
+    public void Edit(View view) {
+        Intent intent = new Intent(DetailActivity.this, EditActivity.class);
+        // give all information to next activity
+        intent.putExtra("position", position);
+        intent.putExtra("Title", title);
+        intent.putExtra("Content", content);
+        intent.putExtra("Mood", mood);
+        intent.putExtra("Timestamp", timestamp);
+        startActivity(intent);
+    }
+
+    // when backPressed go to mainActivity
     @Override
     public void onBackPressed() {
-        Log.i("string", "button back pressed");
         Intent intent = new Intent(DetailActivity.this, MainActivity.class);
         startActivity(intent);
     }
+
 }
